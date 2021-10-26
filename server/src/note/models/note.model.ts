@@ -1,8 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/user/models/user.model';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -22,8 +24,9 @@ export class Note {
   @Column()
   content: string;
 
-  @Field()
-  created_by: string;
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.id)
+  created_by: User;
 
   @Field(() => Date)
   @CreateDateColumn()
