@@ -17,6 +17,8 @@ import { User } from 'src/user/models/user.model';
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
         entities: [Note, User],
+        logger: 'advanced-console',
+        logging: process.env.NODE_ENV !== 'production',
         synchronize: process.env.NODE_ENV !== 'production',
       }),
     }),

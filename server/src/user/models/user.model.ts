@@ -1,21 +1,42 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { hash } from 'argon2';
 
 @ObjectType({ description: 'user' })
-@Entity()
+@Entity({ name: 'users' })
 export class User {
-  @Field(() => String)
+  @Field()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field(() => String)
-  @Column()
+  @Field()
+  @Column({ unique: true })
   email: string;
 
-  @Field(() => String)
-  @Column()
+  @Field()
+  @Column({ unique: true })
   username: string;
 
   @Column()
   password: string;
+
+  @CreateDateColumn({ name: 'date_added' })
+  @Field(() => GraphQLISODateTime)
+  dateAdded: Date;
+
+  @UpdateDateColumn({ name: 'date_modified' })
+  @Field(() => GraphQLISODateTime)
+  dateModified: Date;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await hash(this.password);
+  }
 }

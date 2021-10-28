@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 @ObjectType({ description: 'note' })
-@Entity()
+@Entity({ name: 'notes' })
 export class Note {
   @Field(() => ID)
   @PrimaryGeneratedColumn()

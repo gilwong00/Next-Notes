@@ -2,12 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""user"""
+type User {
+  id: String!
+  email: String!
+  username: String!
+  dateAdded: DateTime!
+  dateModified: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 """note"""
 type Note {
   id: ID!
   title: String!
   content: String!
-  created_by: String!
+  created_by: User!
   created_at: Timestamp!
   updated_at: Timestamp!
 }
@@ -19,4 +33,14 @@ scalar Timestamp
 
 type Query {
   getNote: Note!
+}
+
+type Mutation {
+  createuser(newUserInput: NewUserInput!): User!
+}
+
+input NewUserInput {
+  email: String!
+  username: String!
+  password: String!
 }

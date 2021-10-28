@@ -4,6 +4,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { NoteModule } from './note/note.module';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
+import { GraphQLError } from 'graphql';
+import { Request, Response } from 'express';
 import * as Joi from 'joi';
 
 @Module({
@@ -34,6 +36,14 @@ import * as Joi from 'joi';
         origin: 'http://localhost:3000',
         credentials: true,
       },
+      formatError(err: GraphQLError) {
+        // create a consistent shape later
+        return err;
+      },
+      context: ({ req, res }: { req: Request; res: Response }) => ({
+        req,
+        res,
+      }),
     }),
     NoteModule,
     UserModule,
