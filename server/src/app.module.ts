@@ -23,18 +23,21 @@ import * as Joi from 'joi';
         POSTGRES_USER: Joi.string().required(),
         POSTGRES_PASSWORD: Joi.string().required(),
         POSTGRES_DB: Joi.string().required(),
-      }),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
+        SESSION_SECRET: Joi.string().required()
+      })
     }),
     DatabaseModule,
     GraphQLModule.forRoot({
       playground: true,
       autoSchemaFile: 'schema.gql',
       buildSchemaOptions: {
-        dateScalarMode: 'timestamp',
+        dateScalarMode: 'timestamp'
       },
       cors: {
         origin: 'http://localhost:3000',
-        credentials: true,
+        credentials: true
       },
       formatError(err: GraphQLError) {
         // create a consistent shape later
@@ -42,12 +45,12 @@ import * as Joi from 'joi';
       },
       context: ({ req, res }: { req: Request; res: Response }) => ({
         req,
-        res,
-      }),
+        res
+      })
     }),
     NoteModule,
     UserModule,
-    DatabaseModule,
-  ],
+    DatabaseModule
+  ]
 })
 export class AppModule {}

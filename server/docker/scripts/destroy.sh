@@ -1,2 +1,2 @@
-docker kill next_notes_pg
-docker container rm next_notes_pg
+docker kill solid_notes_pg
+docker container rm solid_notes_pg

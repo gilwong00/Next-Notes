@@ -9,6 +9,7 @@ type User {
   username: String!
   dateAdded: DateTime!
   dateModified: DateTime!
+  notes: [Note!]!
 }
 
 """
@@ -33,14 +34,21 @@ scalar Timestamp
 
 type Query {
   getNote: Note!
+  whoAmI: User!
 }
 
 type Mutation {
   createuser(newUserInput: NewUserInput!): User!
+  login(loginUserInput: LoginUserInput!): User!
 }
 
 input NewUserInput {
   email: String!
+  username: String!
+  password: String!
+}
+
+input LoginUserInput {
   username: String!
   password: String!
 }

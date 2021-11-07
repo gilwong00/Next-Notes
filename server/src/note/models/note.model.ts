@@ -4,9 +4,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 
 @ObjectType({ description: 'note' })
@@ -20,12 +21,14 @@ export class Note {
   @Column()
   title: string;
 
-  @Field()
-  @Column()
+  @Field(() => String)
+  @Column('text')
+  @Index()
   content: string;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.id)
+  @Index()
   created_by: User;
 
   @Field(() => Date)
