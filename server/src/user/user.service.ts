@@ -75,6 +75,7 @@ export class UserService {
 
   async getUserById(id: string) {
     try {
+      console.log('YEET');
       const user = await this.usersRepository.findOneOrFail({ id });
       return user;
     } catch (err) {

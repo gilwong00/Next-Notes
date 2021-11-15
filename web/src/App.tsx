@@ -1,26 +1,36 @@
-import type { Component } from "solid-js";
-
-import logo from "./logo.svg";
-import styles from "./App.module.css";
+import type { Component } from 'solid-js';
+import { Routes, Route } from 'solid-app-router';
+import { Layout } from './Layout';
+import { Login } from './Auth';
+import { ProtectedRoute } from './ProtectedRoute';
+import { Home } from './Home';
+import { createQuery } from 'solid-urql';
+import { whoamiQuery } from './graphql/queries/whoami';
 
 const App: Component = () => {
+  const [items, itemsState] = createQuery({
+    query: whoamiQuery
+  });
+
+  console.log('items', items());
+  console.log('itemsState', itemsState().fetching);
+
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route path='/' element={<ProtectedRoute />}>
+          <Route path='/' element={<Home />} />
+        </Route>
+        {/* <Route path='/users/:id' element={<User />}>
+          <Route path='/' element={<UserHome />} />
+          <Route path='/settings' element={<UserSettings />} />
+          <Route path='/*all' element={<UserNotFound />} />
+        </Route>
+        <Route path='/' element={<Home />} />
+        <Route path='/*all' element={<NotFound />} /> */}
+      </Routes>
+    </Layout>
   );
 };
 

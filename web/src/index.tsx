@@ -1,13 +1,14 @@
 import { render } from 'solid-js/web';
 import { Suspense } from 'solid-js';
+import { Router } from 'solid-app-router';
 import {
   createClient,
   dedupExchange,
   fetchExchange,
   Provider
 } from 'solid-urql';
-import { cacheExchange } from '@urql/exchange-graphcache';
 import { devtoolsExchange } from '@urql/devtools';
+import { cache } from './cache';
 import App from './App';
 import './index.css';
 
@@ -17,26 +18,17 @@ const client = createClient({
   fetchOptions: {
     credentials: 'include'
   },
-  exchanges: [
-    devtoolsExchange,
-    dedupExchange,
-    cacheExchange({
-      updates: {
-        Mutation: {
-          // mutation updates here
-        }
-      }
-    }),
-    fetchExchange
-  ]
+  exchanges: [devtoolsExchange, dedupExchange, cache, fetchExchange]
 });
 
 render(
   () => (
     <Provider value={client}>
-      <Suspense fallback={<>Loading....</>}>
-        <App />
-      </Suspense>
+      <Router>
+        <Suspense fallback={<>Loading....</>}>
+          <App />
+        </Suspense>
+      </Router>
     </Provider>
   ),
   document.getElementById('root') as HTMLElement

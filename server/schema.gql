@@ -22,7 +22,6 @@ type Note {
   id: ID!
   title: String!
   content: String!
-  created_by: User!
   created_at: Timestamp!
   updated_at: Timestamp!
 }
@@ -34,7 +33,7 @@ scalar Timestamp
 
 type Query {
   getNote: Note!
-  whoAmI: User!
+  whoami: User!
 }
 
 type Mutation {

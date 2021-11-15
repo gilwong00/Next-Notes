@@ -26,7 +26,7 @@ export class Note {
   @Index()
   content: string;
 
-  @Field(() => User)
+  // @Field(() => User)
   @ManyToOne(() => User, (user) => user.id)
   @Index()
   created_by: User;

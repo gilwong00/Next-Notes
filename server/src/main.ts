@@ -29,7 +29,7 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(5000);
+  await app.listen(configService.get('PORT'));
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
