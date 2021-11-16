@@ -11,10 +11,21 @@ const LoginContainer = styled('div')`
   overflow-y: hidden;
 `;
 
+const LoginForm = styled('div')`
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 50px;
+  user-select: none;
+  gap: 20px;
+`;
+
 const Login: Component = (props: LoginProps) => {
   return (
     <LoginContainer>
-      <h2>Login</h2>
+      <LoginForm>
+        <h2>Solid Note</h2>
+      </LoginForm>
     </LoginContainer>
   );
 };

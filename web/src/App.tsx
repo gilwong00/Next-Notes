@@ -4,17 +4,8 @@ import { Layout } from './Layout';
 import { Login } from './Auth';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Home } from './Home';
-import { createQuery } from 'solid-urql';
-import { whoamiQuery } from './graphql/queries/whoami';
 
 const App: Component = () => {
-  const [items, itemsState] = createQuery({
-    query: whoamiQuery
-  });
-
-  console.log('items', items());
-  console.log('itemsState', itemsState().fetching);
-
   return (
     <Layout>
       <Routes>
