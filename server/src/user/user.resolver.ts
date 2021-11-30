@@ -29,8 +29,7 @@ export class UserResolver {
 
   @Mutation(() => User)
   async createuser(
-    @Args('newUserInput') newUserInput: NewUser,
-    @Context() ctx: GraphQLContext
+    @Args('newUserInput') newUserInput: NewUser
   ): Promise<Partial<User>> {
     return await this.userService.createUser(newUserInput);
   }
