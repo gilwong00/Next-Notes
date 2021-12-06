@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GraphQLContext } from 'src/@types';
-import { User } from 'src/user/models/user.model';
 import { Repository } from 'typeorm';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { Note } from './models/note.model';
@@ -10,11 +9,9 @@ import { Note } from './models/note.model';
 export class NoteService {
   constructor(
     @InjectRepository(Note)
-    private noteRepository: Repository<Note>,
-    private usersRepository: Repository<User>
+    private noteRepository: Repository<Note>
   ) {
     this.noteRepository = noteRepository;
-    this.usersRepository = usersRepository;
   }
 
   async getUserNotes(userId: string) {
@@ -36,13 +33,9 @@ export class NoteService {
 
   async createNote(dto: CreateNoteDto, ctx: GraphQLContext) {
     try {
-      const user = await this.usersRepository.findOneOrFail({
-        id: ctx.req.session.userId
-      });
-
       const newNote = await this.noteRepository.create({
         ...dto,
-        created_by: user
+        created_by: ctx.req.session.userId
       });
 
       const note = await this.noteRepository.save(newNote);

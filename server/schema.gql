@@ -22,6 +22,7 @@ type Note {
   id: ID!
   title: String!
   content: String!
+  created_by: String!
   created_at: Timestamp!
   updated_at: Timestamp!
 }
@@ -37,8 +38,14 @@ type Query {
 }
 
 type Mutation {
-  createuser(newUserInput: NewUserInput!): User!
+  createNote(createNoteInput: CreateNoteInput!): Note!
+  createUser(newUserInput: NewUserInput!): User!
   login(loginUserInput: LoginUserInput!): User!
+}
+
+input CreateNoteInput {
+  content: String!
+  title: String!
 }
 
 input NewUserInput {

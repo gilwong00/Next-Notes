@@ -28,7 +28,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async createuser(
+  async createUser(
     @Args('newUserInput') newUserInput: NewUser
   ): Promise<Partial<User>> {
     return await this.userService.createUser(newUserInput);

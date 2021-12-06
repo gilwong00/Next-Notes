@@ -26,10 +26,10 @@ export class Note {
   @Index()
   content: string;
 
-  @Field(() => User)
+  @Field()
   @ManyToOne(() => User, (user) => user.id)
   @Index()
-  created_by: User;
+  created_by: string;
 
   @Field(() => Date)
   @CreateDateColumn()
