@@ -5,7 +5,7 @@ import styled from 'styled-components';
 interface Props {}
 
 const Login = (props: Props) => {
-  return <div></div>;
+  return <div>Login</div>;
 };
 
 export default Login;
