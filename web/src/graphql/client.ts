@@ -20,7 +20,7 @@ export const client = createClient({
     process.env.NODE_ENV === 'production'
       ? ''
       : 'http://localhost:5000/graphql',
-  requestPolicy: 'cache-first',
+  requestPolicy: 'cache-and-network',
   fetchOptions: {
     credentials: 'include'
   },

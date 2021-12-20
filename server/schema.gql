@@ -35,6 +35,7 @@ scalar Timestamp
 type Query {
   getNote: Note!
   whoami: User!
+  searchNotes(searchText: String!): [Note!]!
 }
 
 type Mutation {

@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 import { GraphQLError } from 'graphql';
 import { Request, Response } from 'express';
+import { SearchModule } from './search/search.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -50,7 +51,8 @@ import * as Joi from 'joi';
     }),
     NoteModule,
     UserModule,
-    DatabaseModule
+    DatabaseModule,
+    SearchModule
   ]
 })
 export class AppModule {}

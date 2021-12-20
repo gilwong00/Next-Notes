@@ -23,9 +23,11 @@
 		"docker:destroy": "sh docker/scripts/destroy.sh"
 	},
 	"dependencies": {
+		"@elastic/elasticsearch": "^7.16.0",
 		"@nestjs/common": "^8.0.0",
 		"@nestjs/config": "^1.0.2",
 		"@nestjs/core": "^8.0.0",
+		"@nestjs/elasticsearch": "^8.0.0",
 		"@nestjs/graphql": "^7.10.6",
 		"@nestjs/jwt": "^8.0.0",
 		"@nestjs/platform-express": "^8.0.0",
