@@ -11,10 +11,6 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smooting: antialiased;
     -moz-font-smooting: grayscale;
   }
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
   button {
     cursor: pointer;
     border: none;

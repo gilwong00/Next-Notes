@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { GraphQLError } from 'graphql';
 import { Request, Response } from 'express';
 import { SearchModule } from './search/search.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import * as Joi from 'joi';
 
 @Module({
@@ -48,6 +49,15 @@ import * as Joi from 'joi';
         req,
         res
       })
+    }),
+    EventEmitterModule.forRoot({
+      wildcard: false,
+      // the maximum amount of listeners that can be assigned to an event
+      maxListeners: 10,
+      // show event name in memory leak message when more than maximum amount of listeners is assigned
+      verboseMemoryLeak: false,
+      // disable throwing uncaughtException if an error event is emitted and it has no listeners
+      ignoreErrors: false
     }),
     NoteModule,
     UserModule,

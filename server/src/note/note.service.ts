@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GraphQLContext } from 'src/@types';
+import { GraphQLContext, NOTE_EVENTS } from 'src/@types';
 import { Repository } from 'typeorm';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { Note } from './models/note.model';
@@ -9,9 +10,11 @@ import { Note } from './models/note.model';
 export class NoteService {
   constructor(
     @InjectRepository(Note)
-    private noteRepository: Repository<Note>
+    private noteRepository: Repository<Note>,
+    private eventEmitter: EventEmitter2
   ) {
     this.noteRepository = noteRepository;
+    this.eventEmitter = eventEmitter;
   }
 
   async getUserNotes(userId: string) {
@@ -39,6 +42,7 @@ export class NoteService {
       });
 
       const note = await this.noteRepository.save(newNote);
+      this.eventEmitter.emit(NOTE_EVENTS.NOTE_CREATE, note);
       return note;
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);

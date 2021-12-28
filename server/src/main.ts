@@ -23,6 +23,7 @@ async function bootstrap() {
       secret: configService.get('SESSION_SECRET'),
       resave: false,
       saveUninitialized: false,
+      name: 'next_note_auth',
       cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
         // httpOnly: true,

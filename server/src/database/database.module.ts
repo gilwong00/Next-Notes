@@ -19,9 +19,9 @@ import { User } from 'src/user/models/user.model';
         entities: [Note, User],
         logger: 'advanced-console',
         logging: process.env.NODE_ENV !== 'production',
-        synchronize: process.env.NODE_ENV !== 'production',
-      }),
-    }),
-  ],
+        synchronize: process.env.NODE_ENV !== 'production'
+      })
+    })
+  ]
 })
 export class DatabaseModule {}

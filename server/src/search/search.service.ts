@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
+import { OnEvent } from '@nestjs/event-emitter';
+import { NOTE_EVENTS } from 'src/@types';
 import { Note } from 'src/note/models/note.model';
 
 @Injectable()
@@ -9,7 +11,8 @@ export class SearchService {
     this.elasticsearchService = elasticsearchService;
   }
 
-  async indexNote(note: Note) {
+  @OnEvent(NOTE_EVENTS.NOTE_CREATE)
+  async indexNote(note: Note): Promise<unknown> {
     return this.elasticsearchService.index({
       index: this.index,
       body: {
@@ -36,5 +39,14 @@ export class SearchService {
 
     const hits = body.hits.hits;
     return hits.map((item: any) => item._source);
+  }
+
+  @OnEvent(NOTE_EVENTS.NOTE_UPDATE)
+  async updateDocument(note: Note) {
+    this.elasticsearchService.update<Note>({
+      index: this.index,
+      id: note.id.toString(),
+      body: note
+    });
   }
 }

@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'urql';
 import { client, ssrCache } from '../graphql';
 import { User } from '../@types';
-import GlobalStyle from '../components/GlobalStyles/GlobalStyles';
+import { GlobalStyle } from '../components';
 
 interface Props extends AppProps {
   user: User;
@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: Props) {
   return (
     <Provider value={client}>
       <GlobalStyle />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </Provider>
   );
 }
