@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
@@ -21,21 +22,30 @@ export class Note {
   @Column()
   title: string;
 
-  @Field(() => String)
+  @Field()
   @Column('text')
   @Index()
   content: string;
 
-  @Field()
   @ManyToOne(() => User, (user) => user.id)
   @Index()
+  @Column()
+  @JoinColumn({ name: 'created_by', referencedColumnName: 'id' })
   created_by: string;
 
-  @Field(() => Date)
   @CreateDateColumn()
-  created_at: Date;
+  date_added: Date;
+
+  @UpdateDateColumn()
+  date_modified: Date;
+
+  // for response
+  @Field()
+  createdBy: string;
 
   @Field(() => Date)
-  @UpdateDateColumn()
-  updated_at: Date;
+  dateAdded: Date;
+
+  @Field(() => Date)
+  dateModified: Date;
 }

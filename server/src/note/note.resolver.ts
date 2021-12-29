@@ -12,9 +12,10 @@ export class NoteResolver {
     this.noteService = noteService;
   }
 
-  @Query(() => Note)
-  async getNote() {
-    return {} as Note;
+  @UseGuards(isAuthGuard)
+  @Query(() => [Note])
+  async getUserNotes(@Context() ctx: GraphQLContext) {
+    return await this.noteService.getUserNotes(ctx.req.session.userId);
   }
 
   @Mutation(() => Note)

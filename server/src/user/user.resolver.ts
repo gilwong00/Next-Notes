@@ -44,6 +44,7 @@ export class UserResolver {
 
   @Query(() => User)
   async whoami(@Context() ctx: GraphQLContext): Promise<Partial<User>> {
+    // read from redis cache instead
     return await this.userService.getUserById(ctx.req.session.userId);
   }
 

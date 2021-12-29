@@ -52,7 +52,6 @@ const Login = () => {
       const { error, data } = await login(payload);
       // TODO: throw up error state
       // if (error) console.log(error);
-      console.log('data', data);
       if (data?.login?.id) return router.push('/');
     } catch (err) {
       console.log(err);

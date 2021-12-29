@@ -1,9 +1,9 @@
 import { client, WHO_AM_I } from '../../graphql';
-import { NextComponentType } from 'next';
+import { NextPage } from 'next';
 
 // this only runs server side
-const withAuth = (WrappedComponent: NextComponentType) => {
-  const WithConditionalRedirectWrapper = (props: Record<string, unknown>) => {
+const withAuth = <T extends {}>(WrappedComponent: NextPage<T>) => {
+  const WithConditionalRedirectWrapper = (props: any) => {
     return <WrappedComponent {...props} />;
   };
 
@@ -18,7 +18,7 @@ const withAuth = (WrappedComponent: NextComponentType) => {
             // pass cookie in SSR call
             fetchOptions: {
               headers: {
-                Cookie: `next_note_auth=${ctx.req.cookies.next_note_auth}`
+                Cookie: `next_note_auth=${ctx?.req?.cookies?.next_note_auth}`
               }
             }
           }
@@ -34,7 +34,7 @@ const withAuth = (WrappedComponent: NextComponentType) => {
       WrappedComponent.getInitialProps &&
       (await WrappedComponent.getInitialProps(ctx));
 
-    return { ...componentProps, user };
+    return { ...componentProps, user: user.data.whoami };
   };
 
   return WithConditionalRedirectWrapper;

@@ -22,9 +22,9 @@ type Note {
   id: ID!
   title: String!
   content: String!
-  created_by: String!
-  created_at: Timestamp!
-  updated_at: Timestamp!
+  createdBy: String!
+  dateAdded: Timestamp!
+  dateModified: Timestamp!
 }
 
 """
@@ -33,7 +33,7 @@ type Note {
 scalar Timestamp
 
 type Query {
-  getNote: Note!
+  getUserNotes: [Note!]!
   whoami: User!
   searchNotes(searchText: String!): [Note!]!
 }

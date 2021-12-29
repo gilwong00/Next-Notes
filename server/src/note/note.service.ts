@@ -17,24 +17,31 @@ export class NoteService {
     this.eventEmitter = eventEmitter;
   }
 
-  async getUserNotes(userId: string) {
+  async getUserNotes(
+    userId: string
+  ): Promise<Array<Omit<Note, 'created_by' | 'date_added' | 'date_modified'>>> {
     try {
       const userNotes = await this.noteRepository.find({
-        relations: ['created_by'],
+        // relations: ['created_by'],
         where: {
-          created_by: {
-            id: userId
-          }
+          created_by: userId
         }
       });
 
-      return userNotes;
+      return userNotes.map((note: Note) => ({
+        id: note.id,
+        title: note.title,
+        content: note.content,
+        createdBy: note.created_by,
+        dateAdded: note.date_added,
+        dateModified: note.date_modified
+      }));
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async createNote(dto: CreateNoteDto, ctx: GraphQLContext) {
+  async createNote(dto: CreateNoteDto, ctx: GraphQLContext): Promise<Note> {
     try {
       const newNote = await this.noteRepository.create({
         ...dto,
