@@ -9,7 +9,7 @@ const FormContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #f1f1f1;
+  border: 1px solid #f2f2f2;
   border-radius: 5px;
   padding: 20px;
   box-shadow: #ccc 0px 4px 5px -2px;

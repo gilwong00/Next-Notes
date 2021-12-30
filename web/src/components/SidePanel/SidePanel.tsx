@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { User } from '../../@types';
 import { FiLogOut, FiSearch, FiPlusCircle, FiBook } from 'react-icons/fi';
 import styled from 'styled-components';
+import { CREATE_NOTE_MUTATION } from '../../graphql/mutations';
 
 interface Props {
   user: User;
@@ -101,9 +102,15 @@ const MenuOption = styled.li`
 `;
 
 const SidePanel: React.FC<Props> = ({ user }) => {
-  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const router = useRouter();
+  const [, createNote] = useMutation(CREATE_NOTE_MUTATION);
 
+  const handleNewNoteClick = async () => {
+    // onclick create new note, push to cache
+    // set as active or selected note
+    const { error, data } = await createNote({ title: 'Title', content: '' });
+  };
   const handleLogoutClick = async () => {};
   return (
     <SidePanelContainer>
@@ -122,7 +129,7 @@ const SidePanel: React.FC<Props> = ({ user }) => {
           onChange={e => setSearchTerm(e.target.value)}
         />
       </SearchContainer>
-      <NewNoteBtnContainer>
+      <NewNoteBtnContainer onClick={handleNewNoteClick}>
         <FiPlusCircle />
         <span>New Note</span>
       </NewNoteBtnContainer>

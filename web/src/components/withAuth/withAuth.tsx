@@ -34,7 +34,7 @@ const withAuth = <T extends {}>(WrappedComponent: NextPage<T>) => {
       WrappedComponent.getInitialProps &&
       (await WrappedComponent.getInitialProps(ctx));
 
-    return { ...componentProps, user: user.data.whoami };
+    return { ...componentProps, user: user?.data?.whoami };
   };
 
   return WithConditionalRedirectWrapper;

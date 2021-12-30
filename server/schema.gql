@@ -23,14 +23,9 @@ type Note {
   title: String!
   content: String!
   createdBy: String!
-  dateAdded: Timestamp!
-  dateModified: Timestamp!
+  dateAdded: DateTime!
+  dateModified: DateTime!
 }
-
-"""
-`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
-"""
-scalar Timestamp
 
 type Query {
   getUserNotes: [Note!]!

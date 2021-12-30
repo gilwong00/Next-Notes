@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/user/models/user.model';
 import {
   Column,
@@ -43,9 +43,9 @@ export class Note {
   @Field()
   createdBy: string;
 
-  @Field(() => Date)
+  @Field(() => GraphQLISODateTime)
   dateAdded: Date;
 
-  @Field(() => Date)
+  @Field(() => GraphQLISODateTime)
   dateModified: Date;
 }

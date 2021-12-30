@@ -25,6 +25,9 @@ export class NoteService {
         // relations: ['created_by'],
         where: {
           created_by: userId
+        },
+        order: {
+          date_added: 'DESC'
         }
       });
 
@@ -50,7 +53,13 @@ export class NoteService {
 
       const note = await this.noteRepository.save(newNote);
       this.eventEmitter.emit(NOTE_EVENTS.NOTE_CREATE, note);
-      return note;
+
+      return {
+        ...note,
+        createdBy: note.created_by,
+        dateAdded: note.date_added,
+        dateModified: note.date_modified
+      };
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
