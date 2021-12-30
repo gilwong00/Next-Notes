@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import Note from './Note';
 import styled from 'styled-components';
 import { useQuery } from 'urql';
@@ -6,12 +6,10 @@ import { GET_USER_NOTES_QUERY } from '../../graphql';
 import { FiArrowDown, FiArrowUp } from 'react-icons/fi';
 import { INote } from '../../@types';
 
-interface Props {}
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   max-width: 350px;
   background-color: ${props => props.theme.color.whitesmoke};
@@ -40,20 +38,30 @@ const ListContainer = styled.div`
   height: 100%;
 `;
 
-const NoteList: React.FC = (props: Props) => {
-  const [sortBy, setSortBy] = useState<'desc' | 'asc'>('desc');
+const NoteList: React.FC = () => {
+  // maybe hoist this logic to the home(index) component
+  const [orderBy, setOrderBy] = useState<'DESC' | 'ASC'>('DESC');
   const [selectedNote, setSelectedNote] = useState<INote | null>(null);
   const [result] = useQuery({
-    query: GET_USER_NOTES_QUERY
+    query: GET_USER_NOTES_QUERY,
+    variables: { orderBy }
   });
 
   const { data, fetching } = result;
-  const notes = data?.getUserNotes ?? [];
+  const notes = useMemo(() => data?.getUserNotes ?? [], [data]);
 
   const handleNoteSelect = useCallback(
     (note: INote) => setSelectedNote(note),
     [setSelectedNote]
   );
+
+  const toggleOrderBy = () =>
+    setOrderBy(curr => (curr === 'DESC' ? 'ASC' : 'DESC'));
+
+  useEffect(() => {
+    // default selected to most recent note
+    setSelectedNote(notes[0]);
+  }, [notes]);
 
   if (fetching) return null;
   return (
@@ -61,8 +69,10 @@ const NoteList: React.FC = (props: Props) => {
       <Header>All Notes</Header>
       <ListActionContainer>
         <span>{notes.length} Notes</span>
-        <SortContainer>
-          <span>{sortBy === 'desc' ? <FiArrowDown /> : <FiArrowUp />}</span>
+        <SortContainer onClick={toggleOrderBy}>
+          <span>
+            {orderBy.toLowerCase() === 'desc' ? <FiArrowDown /> : <FiArrowUp />}
+          </span>
         </SortContainer>
       </ListActionContainer>
       <ListContainer>

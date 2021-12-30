@@ -65,6 +65,8 @@ const NoteDetails = styled.div`
   margin-bottom: 5px;
 `;
 
+const STRIPE_HTML_REGEX = /<[^>]*>?/gm;
+
 const Note: React.FC<Props> = ({ note, isSelected, handleNoteSelect }) => {
   const dateOptions: DateOptions = {
     month: 'long',
@@ -91,7 +93,7 @@ const Note: React.FC<Props> = ({ note, isSelected, handleNoteSelect }) => {
     >
       <NoteDetails>
         <Title>{note.title}</Title>
-        <div>{note.content}</div>
+        <div>{note.content.replace(STRIPE_HTML_REGEX, '').slice(0, 20)}</div>
         <small>
           {displayDate} at {displayTime}
         </small>

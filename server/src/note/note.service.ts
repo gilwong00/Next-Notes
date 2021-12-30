@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GraphQLContext, NOTE_EVENTS } from 'src/@types';
+import { GraphQLContext, NoteOrderBy, NOTE_EVENTS } from 'src/@types';
 import { Repository } from 'typeorm';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { Note } from './models/note.model';
@@ -18,7 +18,8 @@ export class NoteService {
   }
 
   async getUserNotes(
-    userId: string
+    userId: string,
+    orderBy: NoteOrderBy = 'DESC'
   ): Promise<Array<Omit<Note, 'created_by' | 'date_added' | 'date_modified'>>> {
     try {
       const userNotes = await this.noteRepository.find({
@@ -27,7 +28,7 @@ export class NoteService {
           created_by: userId
         },
         order: {
-          date_added: 'DESC'
+          date_added: orderBy
         }
       });
 

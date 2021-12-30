@@ -9,3 +9,5 @@ export interface GraphQLContext {
   req: Request & { session: AuthSession };
   res: Response;
 }
+
+export type NoteOrderBy = 'DESC' | 'ASC';

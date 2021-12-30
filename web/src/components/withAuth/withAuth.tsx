@@ -26,8 +26,8 @@ const withAuth = <T extends {}>(WrappedComponent: NextPage<T>) => {
         .toPromise();
 
     if (!user?.data?.whoami?.id) {
-      ctx.res.writeHead(302, { Location: '/login' });
-      ctx.res.end();
+      ctx?.res?.writeHead(302, { Location: '/login' });
+      ctx?.res?.end();
     }
 
     const componentProps =

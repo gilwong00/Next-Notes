@@ -43,10 +43,22 @@ export class SearchService {
 
   @OnEvent(NOTE_EVENTS.NOTE_UPDATE)
   async updateDocument(note: Note) {
-    this.elasticsearchService.update<Note>({
+    const script = Object.entries(note).reduce((result, [key, value]) => {
+      return `${result} ctx._source.${key}='${value}';`;
+    }, '');
+
+    this.elasticsearchService.updateByQuery<Note>({
       index: this.index,
-      id: note.id.toString(),
-      body: note
+      body: {
+        query: {
+          match: {
+            id: note.id
+          }
+        },
+        script: {
+          inline: script
+        }
+      }
     });
   }
 }

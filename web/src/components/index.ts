@@ -6,3 +6,4 @@ export * from './Logo';
 export * from './withAuth';
 export * from './SidePanel';
 export * from './Note';
+export * from './Editor';

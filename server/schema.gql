@@ -28,7 +28,7 @@ type Note {
 }
 
 type Query {
-  getUserNotes: [Note!]!
+  getUserNotes(orderBy: String): [Note!]!
   whoami: User!
   searchNotes(searchText: String!): [Note!]!
 }

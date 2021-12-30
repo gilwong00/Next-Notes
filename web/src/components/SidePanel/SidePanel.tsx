@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
 import { User } from '../../@types';
 import { FiLogOut, FiSearch, FiPlusCircle, FiBook } from 'react-icons/fi';
-import styled from 'styled-components';
 import { CREATE_NOTE_MUTATION } from '../../graphql/mutations';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 const SidePanelContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   max-width: 300px;
   background-color: ${props => props.theme.color.black};
   color: #ccc;
@@ -107,11 +107,15 @@ const SidePanel: React.FC<Props> = ({ user }) => {
   const [, createNote] = useMutation(CREATE_NOTE_MUTATION);
 
   const handleNewNoteClick = async () => {
-    // onclick create new note, push to cache
-    // set as active or selected note
-    const { error, data } = await createNote({ title: 'Title', content: '' });
+    const { error } = await createNote({ title: 'Title', content: '' });
+    // dispatch some error message
+    if (error) console.error(error);
   };
-  const handleLogoutClick = async () => {};
+  const handleLogoutClick = async () => {
+    // call logout mutation
+    router.replace('/login');
+  };
+
   return (
     <SidePanelContainer>
       <UserSection>

@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GraphQLContext } from 'src/@types';
+import { GraphQLContext, NoteOrderBy } from 'src/@types';
 import { isAuthGuard } from 'src/guards/isAuth.guard';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { Note } from './models/note.model';
@@ -14,8 +14,11 @@ export class NoteResolver {
 
   @UseGuards(isAuthGuard)
   @Query(() => [Note])
-  async getUserNotes(@Context() ctx: GraphQLContext) {
-    return await this.noteService.getUserNotes(ctx.req.session.userId);
+  async getUserNotes(
+    @Args('orderBy', { nullable: true }) orderBy: NoteOrderBy,
+    @Context() ctx: GraphQLContext
+  ) {
+    return await this.noteService.getUserNotes(ctx.req.session.userId, orderBy);
   }
 
   @Mutation(() => Note)
