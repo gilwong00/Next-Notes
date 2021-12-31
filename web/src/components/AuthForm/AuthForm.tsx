@@ -95,7 +95,7 @@ const AuthForm: React.FC<Props> = ({ mode, submitting, handleOnSubmit }) => {
           <Column marginTop={5}>
             <Button
               disabled={submitting}
-              backgroundColor='#00a82d'
+              backgroundColor='#06b534'
               width={212}
               label={submitting ? 'Submitting...' : 'Login'}
             />
