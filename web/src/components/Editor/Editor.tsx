@@ -13,7 +13,10 @@ const ReactQuill = dynamic(
 );
 
 interface Props {
-  selectedNote?: INote;
+  selectedNote: INote | null;
+  isSaving: boolean;
+  handleTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleContentChange: (value: string) => void;
 }
 
 const EditorContainer = styled.div`
@@ -40,10 +43,18 @@ const NoteTitleInput = styled.input`
   }
 `;
 
-const Editor: React.FC<Props> = ({ selectedNote }) => {
-  const handleChange = (value: string) => {
-    console.log('value', value);
-  };
+const SavingTextContainer = styled.div`
+  padding: 0 18px;
+  font-style: italic;
+`;
+
+const Editor: React.FC<Props> = ({
+  selectedNote,
+  isSaving,
+  handleTitleChange,
+  handleContentChange
+}) => {
+  const handleChange = (value: string) => handleContentChange(value);
 
   return (
     <EditorContainer>
@@ -51,7 +62,13 @@ const Editor: React.FC<Props> = ({ selectedNote }) => {
         value={selectedNote?.title ?? 'Title'}
         disabled={!selectedNote}
         placeholder='Title'
+        onChange={handleTitleChange}
       />
+      {isSaving && (
+        <SavingTextContainer>
+          <small>saving...</small>
+        </SavingTextContainer>
+      )}
       <ReactQuill
         theme='snow'
         value={selectedNote?.content ?? ''}

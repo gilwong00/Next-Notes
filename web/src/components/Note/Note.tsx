@@ -1,7 +1,9 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
+import { useMutation } from 'urql';
 import { INote } from '../../@types';
 import { FiTrash2 } from 'react-icons/fi';
+import { DELETE_NOTE_MUTATION } from '../../graphql/mutations';
 
 interface Props {
   note: INote;
@@ -68,6 +70,7 @@ const NoteDetails = styled.div`
 const STRIPE_HTML_REGEX = /<[^>]*>?/gm;
 
 const Note: React.FC<Props> = ({ note, isSelected, handleNoteSelect }) => {
+  const [, deleteNote] = useMutation(DELETE_NOTE_MUTATION);
   const dateOptions: DateOptions = {
     month: 'long',
     day: 'numeric',
@@ -78,13 +81,18 @@ const Note: React.FC<Props> = ({ note, isSelected, handleNoteSelect }) => {
     minute: 'numeric',
     second: 'numeric'
   };
-  const date = new Date(note.dateAdded);
+  const date = note?.dateAdded ? new Date(note?.dateAdded) : new Date();
   const displayDate = new Intl.DateTimeFormat('en-US', dateOptions).format(
     date
   );
   const displayTime = new Intl.DateTimeFormat('en-US', timeOptions).format(
     date
   );
+
+  const handleDeleteNote = async () => {
+    const { error } = await deleteNote({ noteId: note.id });
+    if (error) console.error(error);
+  };
 
   return (
     <NoteContainer
@@ -98,7 +106,7 @@ const Note: React.FC<Props> = ({ note, isSelected, handleNoteSelect }) => {
           {displayDate} at {displayTime}
         </small>
       </NoteDetails>
-      <DeleteBtnContainer onClick={() => {}}>
+      <DeleteBtnContainer onClick={handleDeleteNote}>
         <FiTrash2 />
       </DeleteBtnContainer>
     </NoteContainer>

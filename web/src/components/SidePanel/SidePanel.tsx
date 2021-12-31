@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { useMutation } from 'urql';
 import { useRouter } from 'next/router';
 import { User } from '../../@types';
 import { FiLogOut, FiSearch, FiPlusCircle, FiBook } from 'react-icons/fi';
-import { CREATE_NOTE_MUTATION } from '../../graphql/mutations';
+import { CREATE_NOTE_MUTATION, LOGOUT_USER_MUTATION } from '../../graphql';
 
 interface Props {
   user: User;
+  searchTerm: string;
+  handleSearchTextChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const SidePanelContainer = styled.div`
@@ -101,10 +103,14 @@ const MenuOption = styled.li`
   }
 `;
 
-const SidePanel: React.FC<Props> = ({ user }) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+const SidePanel: React.FC<Props> = ({
+  user,
+  searchTerm,
+  handleSearchTextChange
+}) => {
   const router = useRouter();
   const [, createNote] = useMutation(CREATE_NOTE_MUTATION);
+  const [, logout] = useMutation(LOGOUT_USER_MUTATION);
 
   const handleNewNoteClick = async () => {
     const { error } = await createNote({ title: 'Title', content: '' });
@@ -113,14 +119,15 @@ const SidePanel: React.FC<Props> = ({ user }) => {
   };
   const handleLogoutClick = async () => {
     // call logout mutation
-    router.replace('/login');
+    const { data } = await logout();
+    if (data.logout) router.replace('/login');
   };
 
   return (
     <SidePanelContainer>
       <UserSection>
-        <UserIcon>{user.username.substring(0, 1).toUpperCase()}</UserIcon>
-        <span>{user.username}</span>
+        <UserIcon>{user?.username.substring(0, 1).toUpperCase()}</UserIcon>
+        <span>{user?.username}</span>
         <LogoutContainer onClick={handleLogoutClick}>
           <FiLogOut />
         </LogoutContainer>
@@ -130,7 +137,7 @@ const SidePanel: React.FC<Props> = ({ user }) => {
         <SearchInput
           placeholder='Search'
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
+          onChange={handleSearchTextChange}
         />
       </SearchContainer>
       <NewNoteBtnContainer onClick={handleNewNoteClick}>
@@ -147,4 +154,4 @@ const SidePanel: React.FC<Props> = ({ user }) => {
   );
 };
 
-export default SidePanel;
+export default memo(SidePanel);

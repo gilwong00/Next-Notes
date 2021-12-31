@@ -6,3 +6,5 @@ export interface INote {
   dateAdded: number;
   dateModified: number;
 }
+
+export type NoteOrderBy = 'DESC' | 'ASC';
