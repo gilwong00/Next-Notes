@@ -36,6 +36,7 @@ export const cache = cacheExchange({
               whoami: _result.login
             };
           }
+          return data;
         });
       },
       logout: (_result, args, cache) => {

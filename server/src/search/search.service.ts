@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { OnEvent } from '@nestjs/event-emitter';
-import { NOTE_EVENTS } from 'src/@types';
+import { NoteResponse, NOTE_EVENTS, SearchResult } from 'src/@types';
 import { Note } from 'src/note/models/note.model';
+import { mapNoteToResponse } from 'src/utils';
 
 @Injectable()
 export class SearchService {
@@ -24,21 +25,24 @@ export class SearchService {
     });
   }
 
-  async search(text: string) {
+  async search(text: string): Promise<Array<NoteResponse>> {
     const { body } = await this.elasticsearchService.search({
       index: this.index,
       body: {
         query: {
           multi_match: {
+            fields: ['title', 'content'],
             query: text,
-            fields: ['title', 'content']
+            fuzziness: 5
           }
         }
       }
     });
 
-    const hits = body.hits.hits;
-    return hits.map((item: any) => item._source);
+    const response = body.hits.hits.map(({ _source }: SearchResult<Note>) =>
+      mapNoteToResponse(_source)
+    );
+    return response;
   }
 
   @OnEvent(NOTE_EVENTS.NOTE_UPDATE)
@@ -57,6 +61,20 @@ export class SearchService {
         },
         script: {
           inline: script
+        }
+      }
+    });
+  }
+
+  @OnEvent(NOTE_EVENTS.NOTE_DELETE)
+  async deleteDocument(noteId: number) {
+    return this.elasticsearchService.deleteByQuery({
+      index: this.index,
+      body: {
+        query: {
+          match: {
+            id: noteId
+          }
         }
       }
     });

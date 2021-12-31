@@ -19,7 +19,7 @@ scalar DateTime
 
 """note"""
 type Note {
-  id: ID!
+  id: Int!
   title: String!
   content: String!
   createdBy: String!
@@ -28,18 +28,27 @@ type Note {
 }
 
 type Query {
-  getUserNotes(orderBy: String): [Note!]!
+  getUserNotes: [Note!]!
   whoami: User!
   searchNotes(searchText: String!): [Note!]!
 }
 
 type Mutation {
   createNote(createNoteInput: CreateNoteInput!): Note!
+  updateNote(updateNoteInput: updateNoteInput!): Note!
+  deleteNote(noteId: Int!): Int!
   createUser(newUserInput: NewUserInput!): User!
   login(loginUserInput: LoginUserInput!): User!
+  logout: Boolean!
 }
 
 input CreateNoteInput {
+  content: String!
+  title: String!
+}
+
+input updateNoteInput {
+  id: Int!
   content: String!
   title: String!
 }

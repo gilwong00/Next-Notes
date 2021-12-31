@@ -1,3 +1,4 @@
+export * from './AuthForm';
 export * from './Button';
 export * from './Column';
 export * from './FormWrapper';

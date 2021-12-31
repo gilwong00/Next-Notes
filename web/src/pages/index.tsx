@@ -50,7 +50,7 @@ const Home: NextPage<Props> = ({ user }: Props) => {
         ? 1
         : -1;
     });
-  }, [data, orderBy, searchResult]);
+  }, [data, orderBy, searchResult, searchTerm]);
 
   const handleNoteSelect = useCallback(
     (note: INote) => setSelectedNote(note),
@@ -90,29 +90,29 @@ const Home: NextPage<Props> = ({ user }: Props) => {
     if (Array.isArray(notes) && notes.length) setSelectedNote(notes[0]);
   }, [notes]);
 
-  // useEffect(() => {
-  //   // auto save every 5 seconds
-  //   const saveNoteChanges = async () => {
-  //     if (selectedNote) {
-  //       setSaving(true);
-  //       const { error } = await updateNote({
-  //         id: selectedNote.id,
-  //         title: selectedNote.title,
-  //         content: selectedNote.content
-  //       });
+  useEffect(() => {
+    // auto save every 5 seconds
+    const saveNoteChanges = async () => {
+      if (selectedNote) {
+        setSaving(true);
+        const { error } = await updateNote({
+          id: selectedNote.id,
+          title: selectedNote.title,
+          content: selectedNote.content
+        });
 
-  //       if (error) return console.error(error);
-  //     }
-  //   };
+        if (error) return console.error(error);
+      }
+    };
 
-  //   const interval = setInterval(() => saveNoteChanges(), 5 * 1000);
-  //   const timeout = setTimeout(() => setSaving(false), 2000);
+    const interval = setInterval(() => saveNoteChanges(), 5 * 1000);
+    const timeout = setTimeout(() => setSaving(false), 2000);
 
-  //   return () => {
-  //     clearInterval(interval);
-  //     clearTimeout(timeout);
-  //   };
-  // }, [selectedNote, updateNote]);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [selectedNote, updateNote]);
 
   if (fetching || searchResult.fetching) return null;
 

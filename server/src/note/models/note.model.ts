@@ -1,4 +1,4 @@
-import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/user/models/user.model';
 import {
   Column,
@@ -14,7 +14,7 @@ import {
 @ObjectType({ description: 'note' })
 @Entity({ name: 'notes' })
 export class Note {
-  @Field(() => ID)
+  @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number;
 

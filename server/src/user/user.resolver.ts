@@ -1,4 +1,4 @@
-// import { UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   Args,
   Context,
@@ -9,7 +9,7 @@ import {
   Resolver
 } from '@nestjs/graphql';
 import { GraphQLContext } from 'src/@types';
-// import { isAuthGuard } from 'src/guards/isAuth.guard';
+import { isAuthGuard } from 'src/guards/isAuth.guard';
 import { Note } from 'src/note/models/note.model';
 import { NoteService } from 'src/note/note.service';
 import { LoginUser } from './dto/login-user.dto';
@@ -40,6 +40,23 @@ export class UserResolver {
     @Context() ctx: GraphQLContext
   ): Promise<Partial<User>> {
     return await this.userService.login(loginUserInput, ctx);
+  }
+
+  @UseGuards(isAuthGuard)
+  @Mutation(() => Boolean)
+  async logout(@Context() ctx: GraphQLContext) {
+    return new Promise((resolve) =>
+      ctx.req.session.destroy((err: any) => {
+        ctx.res.clearCookie('next_note_auth');
+
+        if (err) {
+          console.log(err);
+          return resolve(false);
+        }
+
+        return resolve(true);
+      })
+    );
   }
 
   @Query(() => User)
